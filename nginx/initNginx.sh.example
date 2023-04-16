@@ -1,0 +1,14 @@
+npm i -g pnpm pm2
+rm -rf /usr/local/lighthouse/softwares/nginx/conf/nginx.conf
+rm -rf /usr/local/lighthouse/softwares/nginx/conf/include/*
+scp ./nginx.conf /usr/local/lighthouse/softwares/nginx/conf
+scp ./chat.tt.conf /usr/local/lighthouse/softwares/nginx/conf/include
+nginx -t
+service nginx restart
+cd ..
+pnpm i
+pnpm build-only
+cd service
+pnpm i
+scp .env.example .env
+echo 请编辑 ./service/.env 中 secret 信息，并执行 pm2 start pm2.config.js
