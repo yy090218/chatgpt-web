@@ -1,10 +1,7 @@
 npm i -g pnpm pm2
 rm -rf /usr/local/lighthouse/softwares/nginx/conf/nginx.conf
 rm -rf /usr/local/lighthouse/softwares/nginx/conf/include/*
-mkdir /usr/local/lighthouse/softwares/nginx/common
-scp ./ssl-common.conf /usr/local/lighthouse/softwares/nginx/common
 scp ./nginx.conf /usr/local/lighthouse/softwares/nginx/conf
-scp ./include/*.conf /usr/local/lighthouse/softwares/nginx/conf/include
 nginx -t
 service nginx restart
 cd ..
