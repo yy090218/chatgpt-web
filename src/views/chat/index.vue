@@ -1,10 +1,9 @@
 <script setup lang='ts'>
 import type { Ref } from 'vue'
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { computed, defineAsyncComponent, onMounted, onUnmounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { NAutoComplete, NButton, NInput, useDialog, useMessage } from 'naive-ui'
-import { Message } from './components'
 import { useScroll } from './hooks/useScroll'
 import { useChat } from './hooks/useChat'
 import { useCopyCode } from './hooks/useCopyCode'
@@ -16,6 +15,8 @@ import { useBasicLayout } from '@/hooks/useBasicLayout'
 import { useAuthStore, useChatStore, usePromptStore } from '@/store'
 import { fetchChatAPIProcess } from '@/api'
 import { t } from '@/locales'
+
+const Message = defineAsyncComponent(() => import('./components/Message/index.vue'))
 
 let controller = new AbortController()
 
