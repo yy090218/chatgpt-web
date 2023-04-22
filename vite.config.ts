@@ -49,6 +49,7 @@ export default defineConfig((env) => {
       commonjsOptions: {
         ignoreTryCatch: false,
       },
+      emptyOutDir: false,
     },
   }
 })
