@@ -27,7 +27,7 @@ export default {
     verify: 'Verify',
     unauthorizedTips: 'Unauthorized, please verify first.',
     unauthorizedOrInsufficientBalanceTips: 'Unauthorized or insufficient tokens',
-    unauthorizedOrInsufficientBalanceHelperTips: 'For assistance, please scan the QR code below.',
+    unauthorizedOrInsufficientBalanceHelperTips: 'If you wish to purchase or become an agent, please scan the QR code below.',
     salePrice: 'Price',
     salePriceUnit: 'CNY',
     saleTokenCount: 'Token Quantity',

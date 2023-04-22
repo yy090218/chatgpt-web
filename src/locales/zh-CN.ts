@@ -27,7 +27,7 @@ export default {
     verify: '验证',
     unauthorizedTips: '未经授权，请先进行验证。',
     unauthorizedOrInsufficientBalanceTips: '未经授权，或 token 不足',
-    unauthorizedOrInsufficientBalanceHelperTips: '如需协助请扫描下方二维码',
+    unauthorizedOrInsufficientBalanceHelperTips: '如需购买或做代理请扫描下方二维码',
     salePrice: '售价',
     salePriceUnit: '元',
     saleTokenCount: 'Token 数量',

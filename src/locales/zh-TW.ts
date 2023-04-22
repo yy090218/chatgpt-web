@@ -27,7 +27,7 @@ export default {
     verify: '驗證',
     unauthorizedTips: '未經授權，請先進行驗證。',
     unauthorizedOrInsufficientBalanceTips: 'Traditional Chinese: 未經授權，或 token 不足',
-    unauthorizedOrInsufficientBalanceHelperTips: '如需協助請掃描下方二維碼。',
+    unauthorizedOrInsufficientBalanceHelperTips: '如需購買或做代理，請掃描下方二維碼',
     salePrice: '售價',
     salePriceUnit: '元',
     saleTokenCount: 'Token 數量',
