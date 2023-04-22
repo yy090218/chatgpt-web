@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
+import { useRouter } from 'vue-router'
 import { getLocalState, setLocalState } from './helper'
-import { router } from '@/router'
 
 export const useChatStore = defineStore('chat-store', {
   state: (): Chat.ChatState => getLocalState(),
@@ -184,6 +184,7 @@ export const useChatStore = defineStore('chat-store', {
 
     async reloadRoute(uuid?: number) {
       this.recordState()
+      const router = useRouter()
       await router.push({ name: 'Chat', params: { uuid } })
     },
 
