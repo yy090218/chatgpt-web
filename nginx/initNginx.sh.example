@@ -1,10 +1,11 @@
-npm i -g pnpm pm2
-rm -rf /usr/local/lighthouse/softwares/nginx/conf/nginx.conf
-rm -rf /usr/local/lighthouse/softwares/nginx/conf/include/*
-scp ./nginx.conf /usr/local/lighthouse/softwares/nginx/conf
+mkdir /etc/nginx/logs
+rm -rf /etc/nginx/conf/nginx.conf
+rm -rf /etc/nginx/conf/conf.d/*
+scp ./nginx.conf /etc/nginx
 nginx -t
 service nginx restart
 cd ..
+npm i -g pnpm pm2
 pnpm i
 pnpm build-only
 cd service
