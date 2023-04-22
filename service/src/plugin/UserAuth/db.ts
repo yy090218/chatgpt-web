@@ -11,6 +11,7 @@ export interface IUserAuth extends Document {
   isFree: boolean
   originalPrice: number // 原价
   salePrice: number // 销售价格
+  agentHostName: string // 代理商
   createdAt: Date
   updatedAt: Date
 }
@@ -28,6 +29,7 @@ const UserAuthSchema = new Schema({
   isFree: { type: Boolean, default: true },
   originalPrice: { type: Number, default: 0 },
   salePrice: { type: Number, default: 0 },
+  agentHostName: { type: String, default: '' },
 }, {
   timestamps: {
     createdAt: true,

@@ -42,7 +42,7 @@ router.post('/chat-process', [auth, limiter], async (req, res) => {
 
     // 返回 usage 信息
     if (data?.detail?.usage?.total_tokens) {
-      const accountInfo = await queryUserAuthRecord(getBaseHeaderInfo(req))
+      const accountInfo = await queryUserAuthRecord({ ...getBaseHeaderInfo(req), agentHostName: req.hostname })
       const withBalanceData = { ...data, balance: 0 }
 
       if (accountInfo) {
@@ -91,7 +91,7 @@ router.post('/verify', async (req, res) => {
     if (!token)
       throw new Error('密钥为空 | Secret key is empty')
 
-    const isValid = await authSecretKeyIsValid({ authSecretKey: token })
+    const isValid = await authSecretKeyIsValid({ authSecretKey: token, agentHostName: req.hostname })
     if (!isValid)
       throw new Error('密钥无效或余额不足 | The key is invalid or the balance is insufficient')
 
@@ -107,7 +107,7 @@ router.post('/verify', async (req, res) => {
  */
 router.get('/account-info', async (req, res) => {
   try {
-    const response = isPermissionRequired() ? (await queryUserAuthRecord(getBaseHeaderInfo(req))) : null
+    const response = isPermissionRequired() ? (await queryUserAuthRecord({ ...getBaseHeaderInfo(req), agentHostName: req.hostname })) : null
     res.send({ status: 'Success', message: '', data: { remainToken: response?.remainToken ?? 0 } })
   }
   catch (error) {
@@ -135,7 +135,7 @@ router.post('/add-auth-secret-key', async (req, res) => {
     const authSecretKeyList: string[] = []
     for (let i = 0; i < +authSecretKeyCount; i++) {
       const authSecretKey = generateAuthSecretKey(model, tokenCount)
-      await addAuthSecretKeyToDB({ authSecretKey, model, tokenCount: +tokenCount, originalPrice: +originalPrice, salePrice: +salePrice })
+      await addAuthSecretKeyToDB({ authSecretKey, model, agentHostName: req.hostname, tokenCount: +tokenCount, originalPrice: +originalPrice, salePrice: +salePrice })
       authSecretKeyList.push(authSecretKey)
     }
 
