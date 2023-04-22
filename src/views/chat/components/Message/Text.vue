@@ -1,9 +1,6 @@
 <script lang="ts" setup>
 import { computed, onMounted, ref } from 'vue'
 import MarkdownIt from 'markdown-it'
-// import mdKatex from '@traptitech/markdown-it-katex'
-import mila from 'markdown-it-link-attributes'
-import hljs from 'highlight.js'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
 import { t } from '@/locales'
 
@@ -21,20 +18,7 @@ const { isMobile } = useBasicLayout()
 
 const textRef = ref<HTMLElement>()
 
-const mdi = new MarkdownIt({
-  linkify: true,
-  highlight(code, language) {
-    const validLang = !!(language && hljs.getLanguage(language))
-    if (validLang) {
-      const lang = language ?? ''
-      return highlightBlock(hljs.highlight(code, { language: lang }).value, lang)
-    }
-    return highlightBlock(hljs.highlightAuto(code).value, '')
-  },
-})
-
-mdi.use(mila, { attrs: { target: '_blank', rel: 'noopener' } })
-// mdi.use(mdKatex, { blockClass: 'katexmath-block rounded-md p-[10px]', errorColor: ' #cc0000' })
+const mdi = ref<MarkdownIt>()
 
 const wrapClass = computed(() => {
   return [
@@ -51,14 +35,33 @@ const wrapClass = computed(() => {
 
 const text = computed(() => {
   const value = props.text ?? ''
-  if (!props.asRawText)
-    return mdi.render(value)
+  if (!props.asRawText && mdi.value)
+    return mdi.value.render(value)
   return value
 })
 
 onMounted(async () => {
-  const { default: mdKatex } = await import('@traptitech/markdown-it-katex')
-  mdi.use(mdKatex, { blockClass: 'katexmath-block rounded-md p-[10px]', errorColor: ' #cc0000' })
+  // 这些文件贼大，延迟加载它们
+  const [{ default: hljs }, { default: mila }, { default: mdKatex }] = await Promise.all([
+    import('highlight.js'),
+    import('markdown-it-link-attributes'),
+    import('@traptitech/markdown-it-katex'),
+  ])
+
+  mdi.value = new MarkdownIt({
+    linkify: true,
+    highlight(code, language) {
+      const validLang = !!(language && hljs.getLanguage(language))
+      if (validLang) {
+        const lang = language ?? ''
+        return highlightBlock(hljs.highlight(code, { language: lang }).value, lang)
+      }
+      return highlightBlock(hljs.highlightAuto(code).value, '')
+    },
+  })
+
+  mdi.value.use(mila, { attrs: { target: '_blank', rel: 'noopener' } })
+  mdi.value.use(mdKatex, { blockClass: 'katexmath-block rounded-md p-[10px]', errorColor: ' #cc0000' })
 })
 
 function highlightBlock(str: string, lang?: string) {

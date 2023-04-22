@@ -50,6 +50,14 @@ export default defineConfig((env) => {
         ignoreTryCatch: false,
       },
       emptyOutDir: false,
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            'vue-router': ['vue-router'],
+            'vue': ['vue'],
+          },
+        },
+      },
     },
   }
 })
