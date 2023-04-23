@@ -119,7 +119,7 @@ export default {
     promptQ1: 'Introduce yourself',
     promptQ2: 'Write a short sci-fi story',
     promptQ3: 'English-Chinese translation',
-    promptA3: 'You are a professional English translator. I hope you can translate the Chinese I input into English and the English I input into Chinese.',
+    promptA3: 'You are a professional English translator. Next, I will input either Chinese or English for you. I hope you can translate the Chinese I input into English and translate the English I input into Chinese.',
     promptQ4: 'Explain quantum computing in simple terms',
     promptQ5: 'Programming: How to make an HTTP request in JavaScript?',
     promptA5: 'How to make an HTTP request in JavaScript?',

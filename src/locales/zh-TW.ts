@@ -119,7 +119,7 @@ export default {
     promptQ1: '簡介',
     promptQ2: '寫一部短篇科幻小說',
     promptQ3: '英漢互譯',
-    promptA3: '你是一名專業的英語翻譯人員，我希望你能將我輸入的中文翻譯為英文，將我輸入的英文翻譯為中文。',
+    promptA3: '你是一名專業的英語翻譯人員，接下來我將對你輸入中文或英文，我希望你能將我輸入的中文翻譯為英文，將我輸入的英文翻譯為中文。',
     promptQ4: '用簡單的語言解釋量子計算',
     promptQ5: '編程：如何在JavaScript中發起HTTP請求？',
     promptA5: '如何在JavaScript中發起HTTP請求？',
