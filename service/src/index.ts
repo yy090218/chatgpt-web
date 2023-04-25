@@ -43,7 +43,7 @@ router.post('/chat-process', [auth, limiter], async (req, res) => {
 
     // 返回 usage 信息
     if (data?.detail?.usage?.total_tokens) {
-      const accountInfo = await queryUserAuthRecord({ ...getBaseHeaderInfo(req), agentHostName: req.hostname })
+      const accountInfo = await queryUserAuthRecord(getBaseHeaderInfo(req))
       const withBalanceData = { ...data, balance: 0 }
 
       if (accountInfo) {
@@ -92,7 +92,7 @@ router.post('/verify', async (req, res) => {
     if (!token)
       throw new Error('密钥为空 | Secret key is empty')
 
-    const isValid = await authSecretKeyIsValid({ authSecretKey: token, agentHostName: req.hostname })
+    const isValid = await authSecretKeyIsValid({ secretKey: token, agentHostName: req.hostname })
     if (!isValid)
       throw new Error('密钥无效或余额不足 | The key is invalid or the balance is insufficient')
 
@@ -108,7 +108,7 @@ router.post('/verify', async (req, res) => {
  */
 router.get('/account-info', async (req, res) => {
   try {
-    const response = isPermissionRequired() ? (await queryUserAuthRecord({ ...getBaseHeaderInfo(req), agentHostName: req.hostname })) : null
+    const response = isPermissionRequired() ? (await queryUserAuthRecord(getBaseHeaderInfo(req))) : null
     res.send({ status: 'Success', message: '', data: { remainToken: response?.remainToken ?? 0 } })
   }
   catch (error) {
@@ -135,9 +135,17 @@ router.post('/add-auth-secret-key', async (req, res) => {
 
     const authSecretKeyList: string[] = []
     for (let i = 0; i < +authSecretKeyCount; i++) {
-      const authSecretKey = generateAuthSecretKey(model, tokenCount)
-      await addAuthSecretKeyToDB({ authSecretKey, model, agentHostName: req.hostname, tokenCount: +tokenCount, originalPrice: +originalPrice, salePrice: +salePrice })
-      authSecretKeyList.push(authSecretKey)
+      const secretKey = generateAuthSecretKey(model, tokenCount)
+
+      // 判断 secretKey 是否存在
+      const isExist = await authSecretKeyIsValid({ secretKey })
+      if (isExist) {
+        i--
+        continue
+      }
+
+      await addAuthSecretKeyToDB({ secretKey, model, tokenCount: +tokenCount, originalPrice: +originalPrice, salePrice: +salePrice })
+      authSecretKeyList.push(secretKey)
     }
 
     res.send({ status: 'Success', message: 'Add successfully', data: authSecretKeyList })

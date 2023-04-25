@@ -1,13 +1,16 @@
+/** 基础用户信息，这些都是从 header 中带过来的 */
+export interface IBaseUserParam { secretKey?: string; ip: string; deviceId: string; agentHostName: string }
+
 /**
  * 获取 header 里面携带的基本参数
  */
-export function getBaseHeaderInfo(req) {
+export function getBaseHeaderInfo(req): IBaseUserParam {
   const Authorization = req.header('Authorization') || ''
-  const authSecretKey = Authorization.replace('Bearer ', '').trim()
+  const secretKey = Authorization.replace('Bearer ', '').trim()
   const ip = getRealIP(req)
   const deviceId = getDeviceId(req)
 
-  return { authSecretKey, ip, deviceId }
+  return { secretKey, ip, deviceId, agentHostName: req.hostname }
 }
 
 /**

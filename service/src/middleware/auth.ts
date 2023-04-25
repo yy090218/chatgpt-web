@@ -5,7 +5,7 @@ import { getBaseHeaderInfo } from 'src/utils/device'
 const auth = async (req, res, next) => {
   if (isPermissionRequired()) {
     try {
-      const authSecret = await queryUserAuthRecord({ ...getBaseHeaderInfo(req), agentHostName: req.hostname })
+      const authSecret = await queryUserAuthRecord(getBaseHeaderInfo(req))
       if (!authSecret)
         throw new Error('Error: 无访问权限 | No access rights')
       if (authSecret.remainToken <= 0)

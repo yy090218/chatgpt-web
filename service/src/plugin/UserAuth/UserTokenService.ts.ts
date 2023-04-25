@@ -1,45 +1,57 @@
+import type { IBaseUserParam } from 'src/utils/device'
 import { dbConn } from '../dbConn'
 import type { IUserAuth } from './db'
 import { UserAuth } from './db'
 import type { OpenAIModel } from './helper'
 
-interface IUserIdParam { authSecretKey?: string; ip: string; deviceId: string }
+/**
+ * 获取 user_auth 表记录
+ */
+const getUserAuth = async ({ secretKey, ip, deviceId }: Partial<IBaseUserParam>) => {
+  let paidUserToken = await UserAuth.findOne({ secretKey })
+
+  if (!paidUserToken)
+    paidUserToken = await UserAuth.findOne({ deviceId })
+
+  if (!paidUserToken)
+    paidUserToken = await UserAuth.findOne({ ip })
+
+  return paidUserToken
+}
 
 /**
- * 判断当前 authSecretKey 是否有效（未过期、有余额）
- * 如果是付费用户，一般是提供一个 authSecretKey 即可
+ * 判断当前 secretKey 是否有效（未过期、有余额）
+ * 如果是付费用户，一般是提供一个 secretKey 即可
  * 如果是免费用户，则需要提供 ip、deviceId
  */
-export async function authSecretKeyIsValid({ authSecretKey, ip, deviceId, agentHostName }: Partial<IUserIdParam> & { agentHostName: string }): Promise<boolean> {
+export async function authSecretKeyIsValid({ secretKey, ip, deviceId, agentHostName }: Partial<IBaseUserParam>): Promise<boolean> {
   if (!dbConn)
     return false
 
-  const paidUserToken = await UserAuth.findOne({ authSecretKey: { $elemMatch: { $in: authSecretKey ? [authSecretKey] : [ip, deviceId] } } })
-  if (!authSecretKey && !paidUserToken && +process.env.FREE_TOKENS) {
+  const userAuthRecord = await getUserAuth({ secretKey, ip, deviceId })
+
+  if (!secretKey && !userAuthRecord && +process.env.FREE_TOKENS) {
+    if (!ip || !deviceId)
+      return false
+
     await addAuthSecretKeyToDB({ ip, deviceId, model: 'gpt-3.5-turbo', agentHostName })
     return true
   }
 
-  // todo：后期移除(20230501)
-  if (paidUserToken && !paidUserToken.agentHostName) {
-    paidUserToken.agentHostName = agentHostName
-    await paidUserToken.save()
-  }
-
-  return !!(paidUserToken && paidUserToken.remainToken > 0)
+  return !!(userAuthRecord && userAuthRecord.remainToken > 0)
 }
 
 /**
  * 向数据库中增加 key（免费或付费用户）。
- * 根据 authSecretKey 的存在与否判断用户类型。
+ * 根据 secretKey 的存在与否判断用户类型。
  * 免费用户 tokenCount 取默认值
  */
-export async function addAuthSecretKeyToDB({ authSecretKey, ip, deviceId, model, agentHostName, originalPrice = 0, salePrice = 0, tokenCount = +(process.env.FREE_TOKENS || 0) }: Partial<IUserIdParam> & { model: OpenAIModel; agentHostName: string; originalPrice?: number; salePrice?: number; tokenCount?: number }): Promise<void> {
+export async function addAuthSecretKeyToDB({ secretKey, ip, deviceId, model, agentHostName, originalPrice = 0, salePrice = 0, tokenCount = +(process.env.FREE_TOKENS || 0) }: Partial<IBaseUserParam> & { model: OpenAIModel; originalPrice?: number; salePrice?: number; tokenCount?: number }): Promise<void> {
   if (!dbConn)
     return
 
-  if (authSecretKey) {
-    const newUserToken = new UserAuth({ authSecretKey: [authSecretKey], model, agentHostName, tokenCount, remainToken: tokenCount, isFree: false, originalPrice, salePrice })
+  if (secretKey) {
+    const newUserToken = new UserAuth({ secretKey, model, agentHostName, tokenCount, remainToken: tokenCount, isFree: false, originalPrice, salePrice })
     await newUserToken.save()
     return
   }
@@ -48,15 +60,15 @@ export async function addAuthSecretKeyToDB({ authSecretKey, ip, deviceId, model,
     return
 
   // 免费用户
-  const newUserToken = new UserAuth({ authSecretKey: [ip, deviceId], model, agentHostName, tokenCount, remainToken: tokenCount, salePrice: 0, originalPrice: 0 })
+  const newUserToken = new UserAuth({ ip, deviceId, model, agentHostName, tokenCount, remainToken: tokenCount, salePrice: 0, originalPrice: 0 })
   await newUserToken.save()
 }
 
 /**
  * 消费 token。
- * 如果 authSecretKey 传入，更新付费用户；否则更新免费用户。
+ * 如果 secretKey 传入，更新付费用户；否则更新免费用户。
  */
-export async function consumeToken({ authSecretKey, ip, deviceId, consumedTokens }: IUserIdParam & { consumedTokens: number }): Promise<void> {
+export async function consumeToken({ secretKey, ip, deviceId, consumedTokens, agentHostName }: IBaseUserParam & { consumedTokens: number }): Promise<void> {
   if (!dbConn)
     return
 
@@ -65,7 +77,12 @@ export async function consumeToken({ authSecretKey, ip, deviceId, consumedTokens
   session.startTransaction()
 
   try {
-    await UserAuth.findOneAndUpdate({ authSecretKey: { $elemMatch: { $in: authSecretKey ? [authSecretKey] : [ip, deviceId] } } }, { $inc: { remainToken: -consumedTokens } }, { session })
+    const userAuthRecord = await getUserAuth({ secretKey, ip, deviceId })
+    userAuthRecord.remainToken -= consumedTokens
+    userAuthRecord.ip = ip
+    userAuthRecord.deviceId = deviceId
+    userAuthRecord.agentHostName = agentHostName
+    await userAuthRecord.save({ session })
 
     // 提交事务
     await session.commitTransaction()
@@ -83,16 +100,16 @@ export async function consumeToken({ authSecretKey, ip, deviceId, consumedTokens
 
 /**
  * 查询记录。
- * 如果 authSecretKey 传入，查询付费用户；否则查询免费用户。
+ * 如果 secretKey 传入，查询付费用户；否则查询免费用户。
  */
-export async function queryUserAuthRecord({ authSecretKey, ip, deviceId, agentHostName }: IUserIdParam & { agentHostName: string }): Promise<IUserAuth | undefined> {
+export async function queryUserAuthRecord({ secretKey, ip, deviceId, agentHostName }: IBaseUserParam): Promise<IUserAuth | undefined> {
   if (!dbConn)
     return
 
-  const isValid = await authSecretKeyIsValid({ authSecretKey, ip, deviceId, agentHostName })
+  const isValid = await authSecretKeyIsValid({ secretKey, ip, deviceId, agentHostName })
   if (!isValid)
     return
 
-  const record = await UserAuth.findOne({ authSecretKey: { $elemMatch: { $in: authSecretKey ? [authSecretKey] : [ip, deviceId] } } })
-  return record
+  const userAuthRecord = await getUserAuth({ secretKey, ip, deviceId })
+  return userAuthRecord
 }

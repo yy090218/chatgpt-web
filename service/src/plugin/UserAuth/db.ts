@@ -4,13 +4,15 @@ import { dbConn } from 'src/plugin/dbConn'
 
 // 定义用户 token 数据模型接口
 export interface IUserAuth extends Document {
-  authSecretKey: string[]
+  secretKey: string // 授权码
   model: string
   tokenCount: number
   remainToken: number
   isFree: boolean
   originalPrice: number // 原价
   salePrice: number // 销售价格
+  ip: string // ip
+  deviceId: string // 设备 id
   agentHostName: string // 代理商
   createdAt: Date
   updatedAt: Date
@@ -18,9 +20,8 @@ export interface IUserAuth extends Document {
 
 // 定义免费用户 token 数据模型 Schema
 const UserAuthSchema = new Schema({
-  authSecretKey: {
-    type: [String],
-    default: [],
+  secretKey: {
+    type: String,
     index: true,
   },
   model: { type: String, enum: ['gpt-3.5-turbo', 'gpt-4'], required: true, index: true },
@@ -29,7 +30,9 @@ const UserAuthSchema = new Schema({
   isFree: { type: Boolean, default: true },
   originalPrice: { type: Number, default: 0 },
   salePrice: { type: Number, default: 0 },
-  agentHostName: { type: String, default: '' },
+  ip: String,
+  deviceId: String,
+  agentHostName: { type: String, index: true },
 }, {
   timestamps: {
     createdAt: true,
