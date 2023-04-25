@@ -37,8 +37,8 @@ export default {
   },
   chat: {
     newChatButton: '新建對話',
-    placeholder: '來說點什麼...（Shift + Enter = 換行，"/" 觸發提示詞）',
-    placeholderMobile: '來說點什麼...',
+    placeholder: '請輸入問題...（Shift + Enter = 換行，"/" 獲取模板）',
+    placeholderMobile: '請輸入問題...',
     copy: '複製',
     copied: '複製成功',
     copyCode: '複製代碼',
@@ -87,7 +87,7 @@ export default {
     monthlyUsage: '本月使用量',
   },
   store: {
-    siderButton: '提示詞商店',
+    siderButton: '模板商店',
     local: '本機',
     online: '線上',
     title: '標題',
@@ -116,7 +116,7 @@ export default {
     question2Answer4: '新建對話：在目前問題結束後，盡量開啟新的對話（點擊左上方新建對話按鈕），而不是在當前對話中繼續其他聊天。',
   },
   introduction: {
-    promptQ1: '簡介',
+    // promptQ1: '簡介',
     promptQ2: '寫一部短篇科幻小說',
     promptQ3: '英漢互譯',
     promptA3: '你是一名專業的英語翻譯人員，接下來我將對你輸入中文或英文，我希望你能將我輸入的中文翻譯為英文，將我輸入的英文翻譯為中文。',
@@ -129,10 +129,9 @@ export default {
     promptA7: '口腔潰瘍是什麼原因引起的？如何改善？',
     promptQ8: '創意：為10歲的孩子過生日有什麼創意點子？',
     promptA8: '為10歲的孩子過生日有什麼創意點子？',
-    fastLearnGPT: '30秒上手ChatGPT',
-    noDisplay: '不再展示',
-    whatGPT: '什麼是ChatGPT？',
-    whatGPTAnswer: 'ChatGPT是一款由OpenAI研發的大型語言模型。具備強大的自然語言處理能力，可以應用於各種場景，如教育、娛樂、新聞、商業等，為用戶提供高質量的問答、撰寫文章、編輯文案等服務。',
-    clickToTry: '單擊下面按鈕試試吧。',
+    gptIntro1: '你好，',
+    gptIntro2: '我是 ChatGPT',
+    gptIntro3: '作為一個人工智能語言模型，我可以回答你的問題，為你提供有用信息，幫助你完成創作。',
+    clickToTry: '選擇以下話題，快速與我對話：',
   },
 }

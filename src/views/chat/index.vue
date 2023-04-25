@@ -512,7 +512,7 @@ onUnmounted(() => {
       <div id="scrollRef" ref="scrollRef" class="h-full overflow-hidden overflow-y-auto">
         <div
           id="image-wrapper"
-          class="w-full max-w-screen-xl m-auto dark:bg-[#101014]"
+          class="w-full h-full max-w-screen-xl m-auto dark:bg-[#101014]"
           :class="[isMobile ? 'p-2' : 'p-4']"
         >
           <template v-if="!dataSources.length">

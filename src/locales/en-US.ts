@@ -37,7 +37,7 @@ export default {
   },
   chat: {
     newChatButton: 'New Chat',
-    placeholder: 'Ask me anything...(Shift + Enter = line break, "/" to trigger prompts)',
+    placeholder: 'Ask me anything...(Shift + Enter = line break, "/" to get template)',
     placeholderMobile: 'Ask me anything...',
     copy: 'Copy',
     copied: 'Copied',
@@ -87,7 +87,7 @@ export default {
     monthlyUsage: 'Monthly Usage',
   },
   store: {
-    siderButton: 'Prompt Store',
+    siderButton: 'Template Store',
     local: 'Local',
     online: 'Online',
     title: 'Title',
@@ -116,7 +116,7 @@ export default {
     question2Answer4: 'Create a new conversation: After the current question is finished, try to start a new conversation (by clicking the "Create a new conversation" button in the upper left corner) instead of continuing other chats in the current conversation.',
   },
   introduction: {
-    promptQ1: 'Introduce yourself',
+    // promptQ1: 'Introduce yourself',
     promptQ2: 'Write a short sci-fi story',
     promptQ3: 'English-Chinese translation',
     promptA3: 'You are a professional English translator. Next, I will input either Chinese or English for you. I hope you can translate the Chinese I input into English and translate the English I input into Chinese.',
@@ -129,10 +129,9 @@ export default {
     promptA7: 'What causes oral ulcers and how to improve them?',
     promptQ8: 'Creativity: What are some creative ideas for a 10-year-old\'s birthday party?',
     promptA8: 'What are some creative ideas for a 10-year-old\'s birthday party?',
-    fastLearnGPT: 'Get started with ChatGPT in 30 seconds',
-    noDisplay: 'No longer displayed',
-    whatGPT: 'What is ChatGPT?',
-    whatGPTAnswer: 'ChatGPT is a large-scale language model developed by OpenAI. With powerful natural language processing capabilities, it can be applied to various scenarios such as education, entertainment, news, business, etc., providing users with high-quality Q&A, article writing, copy editing, and other services.',
-    clickToTry: 'Click the button below to give it a try.',
+    gptIntro1: 'Hello,',
+    gptIntro2: 'I am ChatGPT.',
+    gptIntro3: 'As an artificial intelligence language model, I can answer your questions, provide you with useful information, and help you with your creative endeavors.',
+    clickToTry: 'Choose from the following topics to quickly chat with me:',
   },
 }
