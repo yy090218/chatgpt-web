@@ -1,4 +1,5 @@
 import axios, { type AxiosResponse } from 'axios'
+import { getFingerprint } from './helper'
 import { useAuthStore } from '@/store'
 
 /** 游客 id */
@@ -11,12 +12,9 @@ const service = axios.create({
 service.interceptors.request.use(
   async (config) => {
     // 添加设备指纹
-    if (!visitorId) {
-      const FingerprintJS = await import('@fingerprintjs/fingerprintjs')
-      const fpPromise = await FingerprintJS.load()
-      const deviceInfo = await fpPromise.get()
-      visitorId = deviceInfo.visitorId
-    }
+    if (!visitorId)
+      visitorId = await getFingerprint()
+
     config.headers.deviceId = visitorId
 
     const token = useAuthStore().token
