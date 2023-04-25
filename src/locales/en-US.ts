@@ -60,6 +60,7 @@ export default {
     questionConsumption: 'Question consumption:',
     answerConsumption: 'Answer consumption:',
     totalConsumption: 'Total consumption:',
+    stopResponding: 'Stop Responding',
   },
   setting: {
     setting: 'Setting',

@@ -60,6 +60,7 @@ export default {
     questionConsumption: '提問消耗:',
     answerConsumption: '回答消耗:',
     totalConsumption: '合計消耗:',
+    stopResponding: '停止生成',
   },
   setting: {
     setting: '設定',

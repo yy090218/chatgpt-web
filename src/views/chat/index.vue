@@ -542,7 +542,7 @@ onUnmounted(() => {
                   <template #icon>
                     <SvgIcon icon="ri:stop-circle-line" />
                   </template>
-                  Stop Responding
+                  {{ $t('chat.stopResponding') }}
                 </NButton>
               </div>
             </div>
