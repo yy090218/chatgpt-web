@@ -102,9 +102,9 @@ function handlePress(event: KeyboardEvent) {
               <th>
                 {{ $t('common.saleTokenCount') }}
               </th>
-              <th class="!bg-green-50 font-medium">
+              <th class="!bg-green-50 dark:!bg-green-700 font-medium">
                 {{ $t('common.salePrice') }}
-                <span class="block text-xs text-gray-500 leading-none">
+                <span class="block text-xs text-gray-500 dark:text-gray-300 leading-none">
                   GPT-3.5
                 </span>
               </th>
@@ -116,7 +116,7 @@ function handlePress(event: KeyboardEvent) {
           <tbody>
             <tr v-for="item in PRICE_LIST" :key="item.price">
               <td>{{ item.tokenCount }}</td>
-              <td class="!bg-green-50 font-medium">
+              <td class="!bg-green-50 dark:!bg-green-700 font-medium">
                 {{ item.price }}
                 {{ typeof item.price === 'number' ? $t('common.salePriceUnit') : '' }}
               </td>
