@@ -7,7 +7,7 @@ import { auth } from './middleware/auth'
 import { limiter } from './middleware/limiter'
 import { getBaseHeaderInfo } from './utils/device'
 import type { OpenAIModel } from './plugin/UserAuth'
-import { addAuthSecretKeyToDB, authSecretKeyIsValid, consumeToken, generateAuthSecretKey, queryUserAuthRecord } from './plugin/UserAuth'
+import { addAuthSecretKeyToDB, authSecretKeyIsValid, consumeToken, generateAuthSecretKey, queryUserAuthRecord, updateUserBaseInfo } from './plugin/UserAuth'
 import { isPermissionRequired } from './utils/auth'
 
 const app = express()
@@ -95,6 +95,9 @@ router.post('/verify', async (req, res) => {
     const isValid = await authSecretKeyIsValid({ secretKey: token, agentHostName: req.hostname })
     if (!isValid)
       throw new Error('密钥无效或余额不足 | The key is invalid or the balance is insufficient')
+
+    // 在验证的时候更新 ip、deviceId、agentHostName 信息
+    await updateUserBaseInfo({ ...getBaseHeaderInfo(req), secretKey: token })
 
     res.send({ status: 'Success', message: 'Verify successfully', data: null })
   }

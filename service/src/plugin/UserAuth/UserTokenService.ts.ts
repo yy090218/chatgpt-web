@@ -8,13 +8,13 @@ import type { OpenAIModel } from './helper'
  * 获取 user_auth 表记录
  */
 const getUserAuth = async ({ secretKey, ip, deviceId }: Partial<IBaseUserParam>) => {
-  let paidUserToken = await UserAuth.findOne({ secretKey })
+  let paidUserToken = await UserAuth.findOne({ secretKey: { $exists: true, $eq: secretKey } })
 
   if (!paidUserToken)
-    paidUserToken = await UserAuth.findOne({ deviceId })
+    paidUserToken = await UserAuth.findOne({ deviceId: { $exists: true, $eq: deviceId } })
 
   if (!paidUserToken)
-    paidUserToken = await UserAuth.findOne({ ip })
+    paidUserToken = await UserAuth.findOne({ ip: { $exists: true, $eq: ip } })
 
   return paidUserToken
 }
@@ -112,4 +112,16 @@ export async function queryUserAuthRecord({ secretKey, ip, deviceId, agentHostNa
 
   const userAuthRecord = await getUserAuth({ secretKey, ip, deviceId })
   return userAuthRecord
+}
+
+/**
+ * 更新用户基本信息
+ * 只有付费用户在验证密钥 + 验证通过的时候才需要
+ */
+export async function updateUserBaseInfo({ secretKey, ip, deviceId, agentHostName }: IBaseUserParam) {
+  const isValid = await authSecretKeyIsValid({ secretKey })
+  if (!isValid)
+    return
+
+  await UserAuth.findOneAndUpdate({ secretKey: { $exists: true, $eq: secretKey } }, { $set: { ip, deviceId, agentHostName } })
 }
