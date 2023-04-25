@@ -56,13 +56,11 @@ function emitToParent(value: string) {
     </div>
 
     <!-- 按钮交互 -->
-    <div class="flex flex-wrap">
+    <div class="w-full flex flex-wrap">
       <span class="block w-full mb-2 text-gray-500">{{ $t('introduction.clickToTry') }}</span>
-      <div class="flex flex-wrap">
-        <NButton v-for="item in QUESTION_TEMPLATE" :key="item.label" class="!mr-2 !mb-2" type="tertiary" style="width: fit-content;" @click="emitToParent(item.value)">
-          {{ item.label }}
-        </NButton>
-      </div>
+      <NButton v-for="item in QUESTION_TEMPLATE" :key="item.label" class="!mr-2 !mb-2 !whitespace-break-spaces !leading-4" type="tertiary" style="width: fit-content;" @click="emitToParent(item.value)">
+        {{ item.label }}
+      </NButton>
     </div>
   </section>
   <div v-else class="flex items-center justify-center mt-4 text-center text-neutral-300">

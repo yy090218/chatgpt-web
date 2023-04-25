@@ -129,6 +129,8 @@ export default {
     promptA7: 'What causes oral ulcers and how to improve them?',
     promptQ8: 'Creativity: What are some creative ideas for a 10-year-old\'s birthday party?',
     promptA8: 'What are some creative ideas for a 10-year-old\'s birthday party?',
+    promptQ9: 'Job Posting: Write a Job Description for an Internet AI Product Manager',
+    promptA9: 'Write a Job Description for an Internet AI Product Manager',
     gptIntro1: 'Hello,',
     gptIntro2: 'I am ChatGPT.',
     gptIntro3: 'As an artificial intelligence language model, I can answer your questions, provide you with useful information, and help you with your creative endeavors.',
