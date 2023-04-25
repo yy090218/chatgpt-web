@@ -489,6 +489,11 @@ const footerClass = computed(() => {
 })
 
 onMounted(() => {
+  if (!promptTemplate.value.length) {
+    // 初始化模板内容
+    promptStore.initPromptList()
+  }
+
   scrollToBottom()
   if (inputRef.value && !isMobile.value)
     inputRef.value?.focus()

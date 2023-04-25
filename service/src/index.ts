@@ -1,4 +1,5 @@
 import express from 'express'
+import fetch from 'node-fetch'
 import type { RequestProps } from './types'
 import type { ChatMessage } from './chatgpt'
 import { chatConfig, chatReplyProcess, currentModel } from './chatgpt'
@@ -143,6 +144,21 @@ router.post('/add-auth-secret-key', async (req, res) => {
   }
   catch (error) {
     res.send({ status: 'Fail', message: error.message, data: null })
+  }
+})
+
+/**
+ * 获取模板
+ */
+router.get('/prompts/:fileName', async (req, res) => {
+  try {
+    const { fileName } = req.params
+    const response = await fetch(`https://chatgpt-1258090505.cos.ap-chengdu.myqcloud.com/prompts/${fileName}`)
+    const json = await response.json()
+    res.send(json)
+  }
+  catch (error) {
+    res.send(error)
   }
 })
 
