@@ -113,7 +113,7 @@ export default {
     question2Answer1: 'Simplify input: Try to use short, concise sentences to describe your questions and avoid repetitive or lengthy expressions.',
     question2Answer2: 'Combine questions: Try to describe the same question clearly in one go instead of waiting for a reply before asking another question.',
     question2Answer3: 'Be more accommodating: When the answer meets 80% of your requirements, try to modify the remaining part yourself instead of asking for revisions until it\'s 100% perfect.',
-    question2Answer4: 'Start a new chat: After the current question is finished, try to start a new chat (click the New Chat button in the upper left corner) instead of continuing to chat on a different topic in the current chat.',
+    question2Answer4: 'Create a new conversation: After the current question is finished, try to start a new conversation (by clicking the "Create a new conversation" button in the upper left corner) instead of continuing other chats in the current conversation.',
   },
   introduction: {
     promptQ1: 'Introduce yourself',

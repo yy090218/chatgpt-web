@@ -36,7 +36,7 @@ export default {
     saleLongTerm: '长期',
   },
   chat: {
-    newChatButton: '新建聊天',
+    newChatButton: '新建对话',
     placeholder: '来说点什么吧...（Shift + Enter = 换行，"/" 触发提示词）',
     placeholderMobile: '来说点什么...',
     copy: '复制',
@@ -113,7 +113,7 @@ export default {
     question2Answer1: '简化输入：尽量使用简短、精炼的句子来描述你的问题，避免重复或冗长的表述。',
     question2Answer2: '合并提问：同一问题尽量一次性描述清楚，而不是等它回复后再提出问题。',
     question2Answer3: '多多包容：当回答满足了您 80% 的要求时，剩余的尽量自己修改，而不是一次一次的让它修改到 100% 完美状态。',
-    question2Answer4: '新建聊天：当前问题结束后尽量开启新的聊天（单击左上方新建聊天按钮），而不是在当前聊天中继续换一个话题聊天。',
+    question2Answer4: '新建对话：当前问题结束后尽量开启新的对话（单击左上方新建对话按钮），而不是在当前对话中继续其它聊天。',
   },
   introduction: {
     promptQ1: '介绍下你自己',
