@@ -43,7 +43,8 @@ async function getCanvasFingerprint() {
   ctx.fillText(txt, 4, 17)
 
   // Encode the image data as a data URL
-  const res = await hashString(canvas.toDataURL())
+  const base64 = canvas.toDataURL('image/png').replace('data:image/png;base64,', '')
+  const res = await hashString(base64)
   return res
 }
 
