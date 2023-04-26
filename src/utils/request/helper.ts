@@ -21,16 +21,26 @@ export async function getFingerprint() {
  */
 async function getCanvasFingerprint() {
   const canvas = document.createElement('canvas')
-  const context = canvas.getContext('2d')
-  if (!context)
+  const ctx = canvas.getContext('2d')
+  if (!ctx)
     return
 
   canvas.width = 200
   canvas.height = 200
 
-  // Draw a unique shape
-  context.fillStyle = '#f60'
-  context.fillRect(50, 50, 100, 100)
+  // Text with lowercase/uppercase/punctuation symbols
+  const txt = 'BrowserLeaks,com <canvas> 1.0'
+  ctx.textBaseline = 'top'
+  // The most common type
+  ctx.font = '14px \'Arial\''
+  ctx.textBaseline = 'alphabetic'
+  ctx.fillStyle = '#f60'
+  ctx.fillRect(125, 1, 62, 20)
+  // Some tricks for color mixing to increase the difference in rendering
+  ctx.fillStyle = '#069'
+  ctx.fillText(txt, 2, 15)
+  ctx.fillStyle = 'rgba(102, 204, 0, 0.7)'
+  ctx.fillText(txt, 4, 17)
 
   // Encode the image data as a data URL
   const res = await hashString(canvas.toDataURL())
@@ -42,16 +52,8 @@ async function getCanvasFingerprint() {
  * @param str 字符串
  */
 async function hashString(str: string) {
-  // 将字符串转换为Uint8Array，因为SubtleCrypto.digest()接受的是一个 ArrayBuffer 或 ArrayBufferView 类型的参数
-  const encoder = new TextEncoder()
-  const data = encoder.encode(str)
+  const { default: md5 } = await import('md5')
+  const hashHex = md5(str)
 
-  // 对数据进行SHA-256哈希
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data)
-
-  // 将生成的哈希值转换为十六进制字符串
-  const hashArray = Array.from(new Uint8Array(hashBuffer))
-  const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('')
-
-  return hashHex
+  return hashHex.toLocaleUpperCase()
 }
