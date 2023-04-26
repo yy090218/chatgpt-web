@@ -11,10 +11,10 @@ const getUserAuth = async ({ secretKey, ip, deviceId }: Partial<IBaseUserParam>)
   let paidUserToken = await UserAuth.findOne({ secretKey: { $exists: true, $eq: secretKey } })
 
   if (!paidUserToken)
-    paidUserToken = await UserAuth.findOne({ deviceId: { $exists: true, $eq: deviceId } })
+    paidUserToken = await UserAuth.findOne({ secretKey: null, deviceId: { $exists: true, $eq: deviceId } })
 
   if (!paidUserToken)
-    paidUserToken = await UserAuth.findOne({ ip: { $exists: true, $eq: ip } })
+    paidUserToken = await UserAuth.findOne({ secretKey: null, ip: { $exists: true, $eq: ip } })
 
   return paidUserToken
 }
