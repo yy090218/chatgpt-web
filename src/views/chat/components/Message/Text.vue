@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { computed, onMounted, ref } from 'vue'
-import MarkdownIt from 'markdown-it'
 import { useBasicLayout } from '@/hooks/useBasicLayout'
 import { t } from '@/locales'
 
@@ -18,7 +17,7 @@ const { isMobile } = useBasicLayout()
 
 const textRef = ref<HTMLElement>()
 
-const mdi = ref<MarkdownIt>()
+const mdi = ref<markdownit>()
 
 const wrapClass = computed(() => {
   return [
@@ -42,7 +41,8 @@ const text = computed(() => {
 
 onMounted(async () => {
   // 这些文件贼大，延迟加载它们
-  const [{ default: hljs }, { default: mila }, { default: mdKatex }] = await Promise.all([
+  const [{ default: MarkdownIt }, { default: hljs }, { default: mila }, { default: mdKatex }] = await Promise.all([
+    import('markdown-it'),
     import('highlight.js'),
     import('markdown-it-link-attributes'),
     import('@traptitech/markdown-it-katex'),
