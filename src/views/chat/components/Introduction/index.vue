@@ -48,9 +48,8 @@ function emitToParent(value: string) {
       <div class="flex-1 rounded-md">
         <div class="inline-block font-medium text-2xl mb-4 bg-gradient-to-br from-purple-500 to-green-500 bg-clip-text text-transparent">
           {{ $t('introduction.gptIntro1') }}
-          <div class="flex items-center">
+          <div class="dark:after:text-white after:content-[''] after:inline-block after:translate-y-[4px] after:w-[4px] after:h-[24px] after:text-black after:animate-blink">
             {{ $t('introduction.gptIntro2') }}
-            <span class="dark:text-white w-[4px] h-[24px] text-black animate-blink" />
           </div>
         </div>
         <span class="block text-gray-500 text-justify">{{ $t('introduction.gptIntro3') }}</span>
