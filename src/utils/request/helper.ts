@@ -1,32 +1,87 @@
+let deviceId = ''
+let locked = false
+
 /**
  * 获取设备指纹
  */
 export async function getFingerprint() {
-  // 优先获取 canvas 指纹，为了避免噪音影响，这里取 2 次指纹，判断是否相同
-  // 如果不同，说明 canvas 中加入了随机噪音
-  const fingerprint1 = await getCanvasFingerprint()
-  const fingerprint2 = await getCanvasFingerprint()
-  if (fingerprint1 && fingerprint1 === fingerprint2)
-    return fingerprint1
+  if (locked) {
+    return new Promise<string>((resolve) => {
+      if (deviceId) {
+        resolve(deviceId)
+        return
+      }
 
-  // 无法获取 canvas 指纹的情况下通过 fingerprintjs 获取
+      document.addEventListener('DEVICE_ID_HAS_GENERATED', () => {
+        resolve(deviceId)
+      })
+    })
+  }
+
+  locked = true
+  // 优先获取 canvas 指纹，为了避免噪音影响，这里先判断是否含有噪音
+  const hasNoise = await checkCanvasHasNoise()
+  if (!hasNoise) {
+    const visitorId = await getCanvasFingerprint()
+    if (visitorId) {
+      deviceId = visitorId
+      locked = false
+      dispatchEvent()
+      return deviceId
+    }
+  }
+
+  // 无法获取 canvas 指纹或存在噪音的情况下通过 fingerprintjs 获取
   const FingerprintJS = await import('@fingerprintjs/fingerprintjs')
   const fpPromise = await FingerprintJS.load()
   const deviceInfo = await fpPromise.get()
-  return deviceInfo.visitorId
+  deviceId = deviceInfo.visitorId
+  locked = false
+  dispatchEvent()
+
+  return deviceId
+}
+
+/**
+ * 派发事件
+ */
+function dispatchEvent() {
+  const event = new Event('DEVICE_ID_HAS_GENERATED')
+  document.dispatchEvent(event)
+}
+
+/**
+ * 判断 canvas 中是否含有噪音
+ */
+async function checkCanvasHasNoise() {
+  const base64F = await getPngDataURLByCanvas()
+  const base64S = await getPngDataURLByCanvas()
+  return base64F !== base64S
 }
 
 /**
  * 获取 canvas 指纹
  */
 async function getCanvasFingerprint() {
+  const base64 = await getPngDataURLByCanvas()
+  if (!base64)
+    return
+
+  const res = await hashString(base64)
+  return res
+}
+
+/**
+ * 获取 canvas 绘制 image 的 data URL
+ */
+async function getPngDataURLByCanvas(size = 200) {
   const canvas = document.createElement('canvas')
   const ctx = canvas.getContext('2d')
   if (!ctx)
     return
 
-  canvas.width = 200
-  canvas.height = 200
+  canvas.width = size
+  canvas.height = size
 
   // Text with lowercase/uppercase/punctuation symbols
   const txt = 'BrowserLeaks,com <canvas> 1.0'
@@ -44,8 +99,7 @@ async function getCanvasFingerprint() {
 
   // Encode the image data as a data URL
   const base64 = canvas.toDataURL('image/png').replace('data:image/png;base64,', '')
-  const res = await hashString(base64)
-  return res
+  return base64
 }
 
 /**
