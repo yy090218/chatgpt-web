@@ -19,8 +19,8 @@ function goHome() {
         Sorry, we couldn’t find the page you’re looking for. Perhaps you’ve mistyped the URL? Be sure to check your spelling.
       </p>
       <div class="flex items-center justify-center text-center">
-        <div class="w-[300px]">
-          <img src="../../../icons/404.svg" alt="404">
+        <div>
+          <img width="300px" height="225px" src="../../../icons/404.svg" alt="404">
         </div>
       </div>
       <NButton type="primary" @click="goHome">

@@ -79,8 +79,8 @@ function handlePress(event: KeyboardEvent) {
           </p>
         </header>
         <div class="flex justify-between">
-          <img class="w-[130px]" :src="`https://chatgpt-1258090505.cos.ap-chengdu.myqcloud.com/${referrer}/wechat-contact.png`" alt="微信号: 18500510050">
-          <img class="w-[130px]" :src="`https://chatgpt-1258090505.cos.ap-chengdu.myqcloud.com/${referrer}/wechat-pay.png`" alt="微信付款二维码">
+          <img width="130px" height="130px" :src="`https://chatgpt-1258090505.cos.ap-chengdu.myqcloud.com/${referrer}/wechat-contact.png`" alt="微信号: 18500510050">
+          <img width="130px" height="130px" :src="`https://chatgpt-1258090505.cos.ap-chengdu.myqcloud.com/${referrer}/wechat-pay.png`" alt="微信付款二维码">
         </div>
         <NInput v-model:value="token" class="mt-auto" type="password" placeholder="" show-password-on="click" @keypress="handlePress" />
         <NButton
