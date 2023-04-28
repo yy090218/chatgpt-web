@@ -46,11 +46,13 @@ function emitToParent(value: string) {
         <Avatar class="text-white" />
       </div>
       <div class="flex-1 rounded-md">
-        <span class="inline-block font-medium text-2xl mb-4 bg-gradient-to-b from-purple-500 to-green-500 bg-clip-text text-transparent">
+        <div class="inline-block font-medium text-2xl mb-4 bg-gradient-to-br from-purple-500 to-green-500 bg-clip-text text-transparent">
           {{ $t('introduction.gptIntro1') }}
-          <br>
-          {{ $t('introduction.gptIntro2') }}
-        </span>
+          <div class="flex items-center">
+            {{ $t('introduction.gptIntro2') }}
+            <span class="dark:text-white w-[4px] h-[24px] text-black animate-blink" />
+          </div>
+        </div>
         <span class="block text-gray-500 text-justify">{{ $t('introduction.gptIntro3') }}</span>
       </div>
     </div>

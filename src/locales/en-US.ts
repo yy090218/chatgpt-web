@@ -133,7 +133,7 @@ export default {
     promptQ9: 'Job Posting: Write a Job Description for an Internet AI Product Manager',
     promptA9: 'Write a Job Description for an Internet AI Product Manager',
     gptIntro1: 'Hello,',
-    gptIntro2: 'I am ChatGPT.',
+    gptIntro2: 'I am ChatGPT, how may I help you?',
     gptIntro3: 'As an artificial intelligence language model, I can answer your questions, provide you with useful information, and help you with your creative endeavors.',
     clickToTry: 'Choose from the following topics to quickly chat with me:',
   },

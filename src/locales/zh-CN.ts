@@ -133,7 +133,7 @@ export default {
     promptQ9: '招聘：写一篇互联网AI产品经理招聘JD',
     promptA9: '写一篇互联网AI产品经理招聘JD',
     gptIntro1: '你好，',
-    gptIntro2: '我是 ChatGPT',
+    gptIntro2: '我是 ChatGPT，有什么可以帮助你的吗？',
     gptIntro3: '作为一个人工智能语言模型，我可以回答你的问题，为你提供有用信息，帮助你完成创作。',
     clickToTry: '选择以下话题，快速与我对话：',
   },
