@@ -67,9 +67,9 @@ function handlePress(event: KeyboardEvent) {
 </script>
 
 <template>
-  <NModal class="overflow-y-auto" :show="visible" :style="`width: 90%; max-width: 680px; max-height: ${modalMaxHeight}px;`">
+  <NModal class="overflow-y-auto" :show="visible" :style="`width: 90%; max-width: 660px; max-height: ${modalMaxHeight}px;`">
     <div class="flex flex-wrap justify-between p-8 pb-4 bg-white rounded dark:bg-slate-800">
-      <div class="flex-1 flex flex-col justify-between mb-4 space-y-4 max-w-[280px]">
+      <div class="flex-1 flex flex-col justify-between mb-4 mx-auto space-y-4 min-w-[250px] max-w-[280px]">
         <header class="space-y-2">
           <h2 class="text-2xl font-bold text-center text-slate-800 dark:text-neutral-200">
             {{ $t('common.unauthorizedOrInsufficientBalanceTips') }}
@@ -79,8 +79,8 @@ function handlePress(event: KeyboardEvent) {
           </p>
         </header>
         <div class="flex justify-between">
-          <img width="130px" height="130px" :src="`https://chatgpt-1258090505.cos.ap-chengdu.myqcloud.com/${referrer}/wechat-contact.png`" alt="微信号: 18500510050">
-          <img width="130px" height="130px" :src="`https://chatgpt-1258090505.cos.ap-chengdu.myqcloud.com/${referrer}/wechat-pay.png`" alt="微信付款二维码">
+          <img width="130" height="130" :src="`https://chatgpt-1258090505.cos.ap-chengdu.myqcloud.com/${referrer}/wechat-contact.png`" alt="微信号: 18500510050">
+          <img width="130" height="130" :src="`https://chatgpt-1258090505.cos.ap-chengdu.myqcloud.com/${referrer}/wechat-pay.png`" alt="微信付款二维码">
         </div>
         <NInput v-model:value="token" class="mt-auto" type="password" placeholder="" show-password-on="click" @keypress="handlePress" />
         <NButton
@@ -95,7 +95,7 @@ function handlePress(event: KeyboardEvent) {
       </div>
 
       <!-- 售价表 -->
-      <div class="flex-1 space-y-4 mb-4 max-w-[300px]">
+      <div class="flex-1 space-y-4 mb-4 mx-auto min-w-[250px] max-w-[280px]">
         <NTable single-column :single-line="false">
           <thead>
             <tr class="align-baseline">
