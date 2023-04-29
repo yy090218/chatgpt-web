@@ -9,11 +9,11 @@ export type Language = 'zh-CN' | 'zh-TW' | 'en-US'
 export interface AppState {
   siderCollapsed: boolean
   theme: Theme
-  language: Language
+  language: Language | null
 }
 
 export function defaultSetting(): AppState {
-  return { siderCollapsed: false, theme: 'light', language: 'zh-CN' }
+  return { siderCollapsed: false, theme: 'light', language: null }
 }
 
 export function getLocalSetting(): AppState {
