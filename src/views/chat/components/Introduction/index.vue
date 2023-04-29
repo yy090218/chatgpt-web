@@ -17,10 +17,10 @@ const QUESTION_TEMPLATE = computed(() => [
   { label: t('introduction.promptQ2'), value: t('introduction.promptQ2') },
   { label: t('introduction.promptQ3'), value: t('introduction.promptA3') },
   { label: t('introduction.promptQ4'), value: t('introduction.promptQ4') },
-  { label: t('introduction.promptQ5'), value: t('introduction.promptA5') },
-  { label: t('introduction.promptQ6'), value: t('introduction.promptA6') },
   { label: t('introduction.promptQ7'), value: t('introduction.promptA7') },
-  { label: t('introduction.promptQ8'), value: t('introduction.promptA8') },
+  { label: t('introduction.promptQ6'), value: t('introduction.promptA6') },
+  { label: t('introduction.promptQ5'), value: t('introduction.promptA5') },
+  // { label: t('introduction.promptQ8'), value: t('introduction.promptA8') },
   { label: t('introduction.promptQ9'), value: t('introduction.promptA9') },
 ])
 
