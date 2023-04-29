@@ -6,9 +6,14 @@ import { createI18n } from 'vue-i18n'
 import { useAppStoreWithOut } from '@/store/modules/app'
 import type { Language } from '@/store/modules/app/helper'
 
+type LimitReferer = 'en' | 'cn' | 'tw'
+
 const appStore = useAppStoreWithOut()
 
-const defaultLocale = appStore.language || 'zh-CN'
+const referrer = window.location.host.split('.').slice(-3, -2)[0]
+const defaultLanguageHooks: Record<LimitReferer, Language> = { en: 'en-US', cn: 'zh-CN', tw: 'zh-TW' }
+const defaultLanguage = referrer in defaultLanguageHooks ? defaultLanguageHooks[referrer as LimitReferer] : null
+const defaultLocale = appStore.language || defaultLanguage || 'zh-CN'
 
 const i18n = createI18n({
   locale: defaultLocale,
