@@ -1,15 +1,20 @@
 <script lang="ts" setup>
-import { NButton } from 'naive-ui'
-import { computed } from 'vue'
+import { NButton, NModal, NSelect } from 'naive-ui'
+import { computed, ref } from 'vue'
 import Avatar from '../Message/Avatar.vue'
-import { SvgIcon } from '@/components/common'
+import { GPT_MODEL_OPTIONS } from '../../model'
 import { t } from '@/locales'
+import { getTokenModel } from '@/store/modules/auth/helper'
 
 interface Emit {
   (e: 'update:prompt', value: string): void
+  (e: 'update:model', value: string): void
 }
 
 const emit = defineEmits<Emit>()
+
+const gptModel = ref<string>(getTokenModel())
+const showModal = ref(false)
 
 /** 问题模板 */
 const QUESTION_TEMPLATE = computed(() => [
@@ -24,11 +29,6 @@ const QUESTION_TEMPLATE = computed(() => [
   { label: t('introduction.promptQ9'), value: t('introduction.promptA9') },
 ])
 
-/** 不再展示 */
-const NO_LONGER_DISPLAYED_CACHE_KEY = 'NO_LONGER_DISPLAYED_CACHE_KEY'
-const cache = window.localStorage.getItem(NO_LONGER_DISPLAYED_CACHE_KEY)
-const defaultNoLongerDisplayed = cache ? JSON.parse(cache) : false
-
 /**
  * 广播到父级
  * @param value 当前提示值
@@ -36,12 +36,38 @@ const defaultNoLongerDisplayed = cache ? JSON.parse(cache) : false
 function emitToParent(value: string) {
   emit('update:prompt', value)
 }
+
+/**
+ * 选择 gpt-4 时提示
+ */
+function onChange(value: string) {
+  if (value === 'gpt-4' && getTokenModel() !== value) {
+    showModal.value = true
+    return
+  }
+
+  gptModel.value = value
+  emit('update:model', gptModel.value)
+}
+
+/**
+ * 确认切换
+ */
+function submitCallback() {
+  gptModel.value = 'gpt-4'
+  emit('update:model', gptModel.value)
+}
 </script>
 
 <template>
-  <section v-if="!defaultNoLongerDisplayed" class="h-full flex flex-col justify-between p-4">
+  <section class="h-full flex flex-col justify-between p-4">
+    <!-- 切换 model -->
+    <div class="w-full mx-auto mb-8 md:w-1/2 lg:w-1/3 xl:w-1/4">
+      <NSelect v-model:value="gptModel" :options="GPT_MODEL_OPTIONS" size="large" :on-update:value="onChange" />
+    </div>
+
     <!-- ChatGPT 介绍 -->
-    <div class="flex items-start mb-4">
+    <div class="flex items-start mb-auto">
       <div class="p-0.5 mr-2 bg-black rounded-sm">
         <Avatar class="text-white" />
       </div>
@@ -64,8 +90,15 @@ function emitToParent(value: string) {
       </NButton>
     </div>
   </section>
-  <div v-else class="flex items-center justify-center mt-4 text-center text-neutral-300">
-    <SvgIcon icon="ri:bubble-chart-fill" class="mr-2 text-3xl" />
-    <span>Aha~</span>
-  </div>
+
+  <!-- 切换提醒 -->
+  <NModal
+    v-model:show="showModal"
+    preset="dialog"
+    :title="t('introduction.gpt4TipTitle')"
+    :content="t('introduction.gpt4TipContent')"
+    :positive-text="t('introduction.gpt4TipConfrimText')"
+    :negative-text="t('introduction.gpt4TipCancelText')"
+    @positive-click="submitCallback"
+  />
 </template>

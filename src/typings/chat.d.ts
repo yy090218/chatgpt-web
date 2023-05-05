@@ -9,6 +9,7 @@ declare namespace Chat {
 		conversationOptions?: ConversationRequest | null
 		requestOptions: { prompt: string; options?: ConversationRequest | null }
 		usage?: { promptTokens: number; completionTokens: number; totalTokens: number; }
+		gptModel?: string
 	}
 
 	interface History {

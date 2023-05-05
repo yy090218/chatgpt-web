@@ -61,6 +61,7 @@ export default {
     answerConsumption: 'Answer consumption:',
     totalConsumption: 'Total consumption:',
     stopResponding: 'Stop Responding',
+    gptModel: 'Mode:',
   },
   setting: {
     setting: 'Setting',
@@ -136,5 +137,9 @@ export default {
     gptIntro2: 'I am ChatGPT, how may I help you?',
     gptIntro3: 'As an artificial intelligence language model, I can answer your questions, provide you with useful information, and help you with your creative endeavors.',
     clickToTry: 'Choose from the following topics to quickly chat with me:',
+    gpt4TipTitle: 'Confirm switching to GPT-4 mode?',
+    gpt4TipContent: 'Currently in GPT-3.5 mode, after switching to GPT-4, the token consumption ratio will become 6 times the original.',
+    gpt4TipConfrimText: 'Confirm',
+    gpt4TipCancelText: 'Cancel',
   },
 }

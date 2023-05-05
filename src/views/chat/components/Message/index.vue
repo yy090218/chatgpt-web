@@ -1,6 +1,7 @@
 <script setup lang='ts'>
 import { computed, ref } from 'vue'
 import { NDropdown } from 'naive-ui'
+import { GPT_MODEL_OPTIONS } from '../../model'
 import AvatarComponent from './Avatar.vue'
 import TextComponent from './Text.vue'
 import { SvgIcon } from '@/components/common'
@@ -16,6 +17,7 @@ interface Props {
   error?: boolean
   loading?: boolean
   usage?: Chat.Chat['usage']
+  gptModel?: string
 }
 
 interface Emit {
@@ -36,6 +38,9 @@ const textRef = ref<HTMLElement>()
 const asRawText = ref(props.inversion)
 
 const messageRef = ref<HTMLElement>()
+
+// gpt model 名称
+const gptModelLabel = computed(() => GPT_MODEL_OPTIONS.find(item => item.value === props.gptModel)?.label)
 
 const options = computed(() => {
   const common = [
@@ -99,6 +104,10 @@ function handleRegenerate() {
         <template v-if="!inversion">
           <br>
           {{ $t('chat.questionConsumption') }} {{ props.usage?.promptTokens || '--' }} tokens + {{ $t('chat.answerConsumption') }} {{ props.usage?.completionTokens || '--' }} tokens = {{ $t('chat.totalConsumption') }} {{ props.usage?.totalTokens || '--' }} tokens
+        </template>
+        <template v-if="gptModelLabel">
+          <br>
+          {{ $t('chat.gptModel') }} {{ gptModelLabel }}
         </template>
       </p>
       <div

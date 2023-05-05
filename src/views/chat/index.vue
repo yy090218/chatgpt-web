@@ -16,6 +16,7 @@ import { useBasicLayout } from '@/hooks/useBasicLayout'
 import { useAuthStore, useChatStore, usePromptStore } from '@/store'
 import { fetchChatAPIProcess } from '@/api'
 import { t } from '@/locales'
+import { getTokenModel } from '@/store/modules/auth/helper'
 
 let controller = new AbortController()
 
@@ -44,6 +45,10 @@ const prompt = ref<string>('')
 const loading = ref<boolean>(false)
 const inputRef = ref<Ref | null>(null)
 
+// 要先从历史记录中去取 GPT Model
+const cacheGPTModel = dataSources.value.find(item => !item.inversion)?.gptModel
+const gptModel = ref<string>(cacheGPTModel || getTokenModel())
+
 // 添加PromptStore
 const promptStore = usePromptStore()
 
@@ -65,6 +70,14 @@ function onIntroductionPrompt(value: string) {
 
   // 自动提交
   handleSubmit()
+}
+
+/**
+ * Introduction 组件中切换 api model
+ * @param value 单击的 prompt 值
+ */
+function onApiModelChange(value: string) {
+  gptModel.value = value
 }
 
 function handleSubmit() {
@@ -125,6 +138,7 @@ async function onConversation() {
         prompt: message,
         options,
         signal: controller.signal,
+        model: gptModel.value,
         onDownloadProgress: ({ event }) => {
           const xhr = event.target
           const { responseText } = xhr
@@ -152,6 +166,7 @@ async function onConversation() {
                   completionTokens: data.detail?.usage?.completion_tokens,
                   totalTokens: data.detail?.usage?.total_tokens,
                 },
+                gptModel: gptModel.value,
               },
             )
 
@@ -266,6 +281,7 @@ async function onRegenerate(index: number) {
         prompt: message,
         options,
         signal: controller.signal,
+        model: gptModel.value,
         onDownloadProgress: ({ event }) => {
           const xhr = event.target
           const { responseText } = xhr
@@ -293,6 +309,7 @@ async function onRegenerate(index: number) {
                   completionTokens: data.detail?.usage?.completion_tokens,
                   totalTokens: data.detail?.usage?.total_tokens,
                 },
+                gptModel: gptModel.value,
               },
             )
 
@@ -520,7 +537,7 @@ onUnmounted(() => {
           :class="[isMobile ? 'p-2' : 'p-4']"
         >
           <template v-if="!dataSources.length">
-            <Introduction @update:prompt="onIntroductionPrompt" />
+            <Introduction @update:prompt="onIntroductionPrompt" @update:model="onApiModelChange" />
           </template>
           <template v-else>
             <div>
@@ -533,6 +550,7 @@ onUnmounted(() => {
                 :error="item.error"
                 :loading="item.loading"
                 :usage="item.usage"
+                :gpt-model="item.gptModel"
                 @regenerate="onRegenerate(index)"
                 @delete="handleDelete(index)"
               />

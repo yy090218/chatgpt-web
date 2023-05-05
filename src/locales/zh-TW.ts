@@ -61,6 +61,7 @@ export default {
     answerConsumption: '回答消耗:',
     totalConsumption: '合計消耗:',
     stopResponding: '停止生成',
+    gptModel: '模式:',
   },
   setting: {
     setting: '設定',
@@ -136,5 +137,9 @@ export default {
     gptIntro2: '我是 ChatGPT，有什麼可以幫助您的嗎？',
     gptIntro3: '作為一個人工智能語言模型，我可以回答你的問題，為你提供有用信息，幫助你完成創作。',
     clickToTry: '選擇以下話題，快速與我對話：',
+    gpt4TipTitle: '確認切換到 GPT-4 模式嗎？',
+    gpt4TipContent: '當前為 GPT-3.5 模式，切換為 GPT-4 後，token 消耗比例將變為原來的 6 倍。',
+    gpt4TipConfrimText: '確認',
+    gpt4TipCancelText: '取消',
   },
 }

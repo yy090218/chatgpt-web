@@ -9,6 +9,7 @@ import { getBaseHeaderInfo } from './utils/device'
 import type { OpenAIModel } from './plugin/UserAuth'
 import { addAuthSecretKeyToDB, authSecretKeyIsValid, consumeToken, generateAuthSecretKey, queryUserAuthRecord, updateUserBaseInfo } from './plugin/UserAuth'
 import { isPermissionRequired } from './utils/auth'
+import { calculateConsumedTokens } from './utils/calculateConsumedTokens'
 
 const app = express()
 const router = express.Router()
@@ -27,7 +28,12 @@ router.post('/chat-process', [auth, limiter], async (req, res) => {
   res.setHeader('Content-type', 'application/octet-stream')
 
   try {
-    const { prompt, options = {}, systemMessage, temperature, top_p } = req.body as RequestProps
+    const { prompt, options = {}, systemMessage, temperature, top_p, model } = req.body as RequestProps
+
+    // 校验
+    if (!['gpt-3.5-turbo', 'gpt-4'].includes(model))
+      throw new Error('GPT Model 错误 | GPT Model error.')
+
     let firstChunk = true
     const { data } = await chatReplyProcess({
       message: prompt,
@@ -39,6 +45,7 @@ router.post('/chat-process', [auth, limiter], async (req, res) => {
       systemMessage,
       temperature,
       top_p,
+      model,
     }) as { data: ChatMessage }
 
     // 返回 usage 信息
@@ -47,6 +54,14 @@ router.post('/chat-process', [auth, limiter], async (req, res) => {
       const withBalanceData = { ...data, balance: 0 }
 
       if (accountInfo) {
+        const baseHeaderInfo = getBaseHeaderInfo(req)
+        const { usage } = data.detail
+
+        // 计算提问、回答消耗 + 修改原始数据
+        usage.prompt_tokens = calculateConsumedTokens({ ...baseHeaderInfo, model, consumedTokens: usage.prompt_tokens })
+        usage.completion_tokens = calculateConsumedTokens({ ...baseHeaderInfo, model, consumedTokens: usage.completion_tokens })
+        usage.total_tokens = usage.prompt_tokens + usage.completion_tokens
+
         await consumeToken({ ...getBaseHeaderInfo(req), consumedTokens: data.detail.usage.total_tokens })
         withBalanceData.balance = accountInfo.remainToken - data.detail.usage.total_tokens
       }
