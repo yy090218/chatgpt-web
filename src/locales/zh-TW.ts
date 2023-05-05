@@ -31,7 +31,7 @@ export default {
     salePrice: '售價',
     salePriceUnit: '元',
     saleTokenCount: 'Token 數量',
-    saleValidityPeriod: '有效期',
+    // saleValidityPeriod: '有效期',
     saleFreeType: '免費（集讚）',
     saleLongTerm: '長期',
   },

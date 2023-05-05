@@ -8,7 +8,7 @@ const MODEL_HOOKS = {
     'gpt-4': 6,
   },
   'gpt-4': {
-    'gpt-3.5-turbo': 1 / 6,
+    'gpt-3.5-turbo': 1 / 5,
     'gpt-4': 1,
   },
 }

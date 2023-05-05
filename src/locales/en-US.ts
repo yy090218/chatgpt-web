@@ -31,7 +31,7 @@ export default {
     salePrice: 'Price',
     salePriceUnit: 'CNY',
     saleTokenCount: 'Token Quantity',
-    saleValidityPeriod: 'Validity Period',
+    // saleValidityPeriod: 'Validity Period',
     saleFreeType: 'Free (Collect Likes)',
     saleLongTerm: 'Long-term',
   },

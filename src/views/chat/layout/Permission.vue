@@ -24,12 +24,12 @@ const modalMaxHeight = computed(() => window.innerHeight * 0.8)
 
 /** 售价列表 */
 const PRICE_LIST = computed(() => [
-  { price: t('common.saleFreeType'), tokenCount: 5000, validityPeriod: t('common.saleLongTerm') },
-  { price: 5, tokenCount: 25000, validityPeriod: t('common.saleLongTerm') },
-  { price: 10, tokenCount: 55000, validityPeriod: t('common.saleLongTerm') },
-  { price: 20, tokenCount: 115000, validityPeriod: t('common.saleLongTerm') },
-  { price: 50, tokenCount: 290000, validityPeriod: t('common.saleLongTerm') },
-  { price: 100, tokenCount: 600000, validityPeriod: t('common.saleLongTerm') },
+  { price: t('common.saleFreeType'), gpt4Price: t('common.saleFreeType'), tokenCount: 5000 },
+  { price: 5, gpt4Price: 30, tokenCount: 25000 },
+  { price: 10, gpt4Price: 55, tokenCount: 55000 },
+  { price: 20, gpt4Price: 105, tokenCount: 115000 },
+  { price: 50, gpt4Price: 255, tokenCount: 290000 },
+  { price: 100, gpt4Price: 500, tokenCount: 600000 },
 ])
 
 /** 推荐人，默认为站长 */
@@ -67,7 +67,7 @@ function handlePress(event: KeyboardEvent) {
 </script>
 
 <template>
-  <NModal class="overflow-y-auto" :show="visible" :style="`width: 90%; max-width: 660px; max-height: ${modalMaxHeight}px;`">
+  <NModal class="overflow-y-auto" :show="visible" :style="`width: 90%; max-width: 700px; max-height: ${modalMaxHeight}px;`">
     <div class="flex flex-wrap justify-between p-8 pb-4 bg-white rounded dark:bg-slate-800">
       <div class="flex-1 flex flex-col justify-between mb-4 mx-auto space-y-4 min-w-[250px] max-w-[280px]">
         <header class="space-y-2">
@@ -95,12 +95,15 @@ function handlePress(event: KeyboardEvent) {
       </div>
 
       <!-- 售价表 -->
-      <div class="flex-1 space-y-4 mb-4 mx-auto min-w-[250px] max-w-[280px]">
+      <div class="flex-1 space-y-4 mb-4 mx-auto min-w-[250px] max-w-[320px]">
         <NTable single-column :single-line="false">
           <thead>
             <tr class="align-baseline">
               <th>
                 {{ $t('common.saleTokenCount') }}
+                <span class="block text-xs text-gray-500 dark:text-gray-300 leading-none">
+                  {{ $t('common.saleLongTerm') }}
+                </span>
               </th>
               <th class="!bg-green-50 dark:!bg-green-700 font-medium">
                 {{ $t('common.salePrice') }}
@@ -108,8 +111,11 @@ function handlePress(event: KeyboardEvent) {
                   GPT-3.5
                 </span>
               </th>
-              <th>
-                {{ $t('common.saleValidityPeriod') }}
+              <th class="!bg-green-50 dark:!bg-green-700 font-medium">
+                {{ $t('common.salePrice') }}
+                <span class="block text-xs text-gray-500 dark:text-gray-300 leading-none">
+                  GPT-4
+                </span>
               </th>
             </tr>
           </thead>
@@ -120,7 +126,10 @@ function handlePress(event: KeyboardEvent) {
                 {{ item.price }}
                 {{ typeof item.price === 'number' ? $t('common.salePriceUnit') : '' }}
               </td>
-              <td>{{ item.validityPeriod }}</td>
+              <td class="!bg-green-50 dark:!bg-green-700 font-medium">
+                {{ item.gpt4Price }}
+                {{ typeof item.gpt4Price === 'number' ? $t('common.salePriceUnit') : '' }}
+              </td>
             </tr>
           </tbody>
         </NTable>
