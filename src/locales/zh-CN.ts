@@ -141,5 +141,6 @@ export default {
     gpt4TipContent: '当前为 GPT-3.5 模式，切换为 GPT-4 后，token 消耗比例将变为原来的 6 倍。',
     gpt4TipConfrimText: '确认',
     gpt4TipCancelText: '取消',
+    noDisplayGpt4TipModal: '不再提醒',
   },
 }

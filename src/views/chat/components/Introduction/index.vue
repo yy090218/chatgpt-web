@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { NButton, NModal, NSelect } from 'naive-ui'
+import { NButton, NCheckbox, NModal, NSelect } from 'naive-ui'
 import { computed, ref } from 'vue'
 import Avatar from '../Message/Avatar.vue'
 import { GPT_MODEL_OPTIONS } from '../../model'
@@ -14,7 +14,12 @@ interface Emit {
 const emit = defineEmits<Emit>()
 
 const gptModel = ref<string>(getTokenModel())
-const showModal = ref(false)
+const showModal = ref<boolean>(false)
+
+/** 不再展示 gpt-4 模态框提示 */
+const NO_DISPLAY_GPT_4_TIP_CACHE_KEY = 'NO_DISPLAY_GPT_4_TIP_CACHE_KEY'
+const noDisplayGpt4TipCache = window.localStorage.getItem(NO_DISPLAY_GPT_4_TIP_CACHE_KEY) || JSON.stringify(false)
+const noDisplayGpt4Tip = ref<boolean>(JSON.parse(noDisplayGpt4TipCache))
 
 /** 问题模板 */
 const QUESTION_TEMPLATE = computed(() => [
@@ -41,7 +46,7 @@ function emitToParent(value: string) {
  * 选择 gpt-4 时提示
  */
 function onChange(value: string) {
-  if (value === 'gpt-4' && getTokenModel() !== value) {
+  if (value === 'gpt-4' && getTokenModel() !== value && !noDisplayGpt4Tip.value) {
     showModal.value = true
     return
   }
@@ -56,6 +61,14 @@ function onChange(value: string) {
 function submitCallback() {
   gptModel.value = 'gpt-4'
   emit('update:model', gptModel.value)
+}
+
+/**
+ * 不再提示 gpt-4 切换提醒
+ */
+function addNoDisplayGpt4TipToCache(value: boolean) {
+  noDisplayGpt4Tip.value = value
+  window.localStorage.setItem(NO_DISPLAY_GPT_4_TIP_CACHE_KEY, JSON.stringify(value))
 }
 </script>
 
@@ -96,9 +109,14 @@ function submitCallback() {
     v-model:show="showModal"
     preset="dialog"
     :title="t('introduction.gpt4TipTitle')"
-    :content="t('introduction.gpt4TipContent')"
     :positive-text="t('introduction.gpt4TipConfrimText')"
     :negative-text="t('introduction.gpt4TipCancelText')"
     @positive-click="submitCallback"
-  />
+  >
+    {{ $t('introduction.gpt4TipContent') }}
+    <br>
+    <NCheckbox v-model:checked="noDisplayGpt4Tip" class="mt-2" :on-update:checked="addNoDisplayGpt4TipToCache">
+      {{ $t('introduction.noDisplayGpt4TipModal') }}
+    </NCheckbox>
+  </NModal>
 </template>

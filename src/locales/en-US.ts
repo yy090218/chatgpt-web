@@ -141,5 +141,6 @@ export default {
     gpt4TipContent: 'Currently in GPT-3.5 mode, after switching to GPT-4, the token consumption ratio will become 6 times the original.',
     gpt4TipConfrimText: 'Confirm',
     gpt4TipCancelText: 'Cancel',
+    noDisplayGpt4TipModal: 'Do not remind again.',
   },
 }
