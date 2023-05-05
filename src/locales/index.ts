@@ -27,6 +27,7 @@ const i18n = createI18n({
 })
 
 // 加载默认语言
+appStore.setLanguage(defaultLocale)
 addLocale(defaultLocale)
 
 export const t = i18n.global.t
